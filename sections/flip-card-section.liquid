@@ -1,0 +1,39 @@
+{% schema %}
+{
+  "name": "Featured Collection Slider",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background Color",
+      "default": "#f4f4f4"
+    },
+    {
+      "type": "select",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "options": [
+        {
+          "value": "3",
+          "label": "3 Products"
+        },
+        {
+          "value": "4",
+          "label": "4 Products"
+        }
+      ],
+      "default": "4"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collection Slider"
+    }
+  ]
+}
+{% endschema %}
