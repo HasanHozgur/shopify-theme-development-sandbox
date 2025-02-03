@@ -1,0 +1,43 @@
+{% schema %}
+{
+  "name": "Custom Header Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading Text",
+      "default": "Welcome to our store"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Header"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .custom-header {
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .custom-header h2 {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0;
+  }
+</style>
+
+<div class="custom-header">
+  <h2 style="color: {{ section.settings.heading_color }}">
+    {{ section.settings.heading }}
+  </h2>
+</div>
