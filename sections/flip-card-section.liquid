@@ -1,160 +1,140 @@
-{%- style -%}
-  .placeholder-container {
-    text-align: center;
-    padding: 40px;
-    background: #f4f4f4;
-  }
-{%- endstyle -%}
-
-{%- liquid
-  assign animation_delay = 0
--%}
-
 {{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
 {{ 'flip-card-section.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'flip-card-section.js' | asset_url }}" defer="defer"></script>
 
-<div class="flip-card-section" id="flip-card-section-{{ section.id }}">
-  {%- if section.blocks.size > 0 -%}
-    <!-- Desktop/Tablet Grid View -->
-    <div class="flip-card-container">
+<style>
+  /* Critical CSS to ensure basic layout works immediately */
+  .swiper {
+    width: 100%;
+    padding: 20px;
+    padding-bottom: 50px;
+  }
+
+  .card-container {
+    width: 245px;
+    height: 350px;
+    margin: 0 auto;
+  }
+</style>
+
+<div class="page-width">
+  <div class="swiper mySwiper">
+    <div class="swiper-wrapper">
       {% for block in section.blocks %}
-        {%- liquid
-          assign animation_delay = animation_delay | plus: 1
-          assign animation_delay_ms = animation_delay | times: 150
-        -%}
-        <div
-          class="flip-card"
-          {{ block.shopify_attributes }}
-          data-delay="{{ animation_delay_ms }}"
-        >
-          <div class="flip-card-inner">
-            <!-- Front of Card -->
-            <div class="flip-card-front">
-              {% if block.settings.front_image %}
-                {{
-                  block.settings.front_image
-                  | image_url: width: 500
-                  | image_tag: class: 'front-image', loading: 'lazy', alt: block.settings.front_text
-                  | escape
-                }}
-              {% else %}
-                {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg front-image' }}
-              {% endif %}
-
-              <p class="front-text">
-                {{ block.settings.front_text | default: 'Hover to discover' }}
-              </p>
-            </div>
-
-            <!-- Back of Card -->
-            <div class="flip-card-back">
-              <div class="product-grid">
-                {% for i in (1..3) %}
-                  {% assign product_key = 'product_' | append: i %}
-                  {% assign product = block.settings[product_key] %}
-
-                  {% if product %}
-                    <a href="{{ product.url }}" class="product-item">
-                      {{
-                        product.featured_image
-                        | image_url: width: 150
-                        | image_tag: loading: 'lazy', alt: product.title
-                        | escape
-                      }}
-                      <span class="product-title">{{ product.title }}</span>
-                    </a>
-                  {% endif %}
-                {% endfor %}
+        <div class="swiper-slide" {{ block.shopify_attributes }}>
+          <div class="card-container">
+            <div class="card">
+              <div class="card-front">
+                {% if block.settings.front_image != blank %}
+                  {{
+                    block.settings.front_image
+                    | image_url: width: 245
+                    | image_tag: loading: 'lazy', class: 'front-image', alt: block.settings.front_title
+                  }}
+                {% else %}
+                  {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg front-image' }}
+                {% endif %}
+                <div class="overlay"></div>
+                <h3 class="centered">{{ block.settings.front_title }}</h3>
               </div>
+              <div class="card-back">
+                <div class="content-box">
+                  <div class="toolbox">
+                    <h3>TOOLBOX</h3>
+                  </div>
+                  <div class="product-container {% if block.settings.product_2 == blank %}one-product{% elsif block.settings.product_3 == blank %}two-products{% else %}three-products{% endif %}">
+                    {% if block.settings.product_1 != blank %}
+                      <div class="product-item">
+                        <a href="{{ block.settings.product_1.url }}">
+                          {{
+                            block.settings.product_1.featured_image
+                            | image_url: width: 100
+                            | image_tag: loading: 'lazy', alt: block.settings.product_1.title
+                          }}
+                        </a>
+                      </div>
+                    {% endif %}
 
-              <p class="back-text">
-                {{ block.settings.back_text | default: 'Click to explore' }}
-              </p>
+                    {% if block.settings.product_2 != blank %}
+                      <div class="product-item">
+                        <a href="{{ block.settings.product_2.url }}">
+                          {{
+                            block.settings.product_2.featured_image
+                            | image_url: width: 100
+                            | image_tag: loading: 'lazy', alt: block.settings.product_2.title
+                          }}
+                        </a>
+                      </div>
+                    {% endif %}
+
+                    {% if block.settings.product_3 != blank %}
+                      <div class="product-item">
+                        <a href="{{ block.settings.product_3.url }}">
+                          {{
+                            block.settings.product_3.featured_image
+                            | image_url: width: 100
+                            | image_tag: loading: 'lazy', alt: block.settings.product_3.title
+                          }}
+                        </a>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+                <p>{{ block.settings.back_description }}</p>
+              </div>
             </div>
           </div>
         </div>
       {% endfor %}
     </div>
-
-    <!-- Mobile Swiper View -->
-    <div class="swiper flip-card-swiper">
-      <div class="swiper-wrapper">
-        {% for block in section.blocks %}
-          <div class="swiper-slide">
-            <div class="flip-card" {{ block.shopify_attributes }}>
-              <div class="flip-card-inner">
-                <!-- Front of Card -->
-                <div class="flip-card-front">
-                  {% if block.settings.front_image %}
-                    {{
-                      block.settings.front_image
-                      | image_url: width: 500
-                      | image_tag: class: 'front-image', loading: 'lazy', alt: block.settings.front_text
-                      | escape
-                    }}
-                  {% else %}
-                    {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg front-image' }}
-                  {% endif %}
-
-                  <p class="front-text">
-                    {{ block.settings.front_text | default: 'Touch to discover' }}
-                  </p>
-                </div>
-
-                <!-- Back of Card -->
-                <div class="flip-card-back">
-                  <div class="product-grid">
-                    {% for i in (1..3) %}
-                      {% assign product_key = 'product_' | append: i %}
-                      {% assign product = block.settings[product_key] %}
-
-                      {% if product %}
-                        <a href="{{ product.url }}" class="product-item">
-                          {{
-                            product.featured_image
-                            | image_url: width: 150
-                            | image_tag: loading: 'lazy', alt: product.title
-                            | escape
-                          }}
-                          <span class="product-title">{{ product.title }}</span>
-                        </a>
-                      {% endif %}
-                    {% endfor %}
-                  </div>
-
-                  <p class="back-text">
-                    {{ block.settings.back_text | default: 'Click to explore' }}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-      <div class="swiper-pagination"></div>
-    </div>
-  {%- else -%}
-    <div class="placeholder-container">
-      <p>Add blocks to create flip cards</p>
-    </div>
-  {%- endif -%}
+    <div class="swiper-pagination"></div>
+  </div>
 </div>
+
+<script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
+
+<script defer>
+  window.addEventListener('load', function () {
+    var swiper = new Swiper('.mySwiper', {
+      slidesPerView: 1,
+      spaceBetween: 10,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      breakpoints: {
+        520: {
+          slidesPerView: 2,
+          spaceBetween: 20,
+        },
+        800: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        },
+        1060: {
+          slidesPerView: 4,
+          spaceBetween: 30,
+        },
+        1320: {
+          slidesPerView: 5,
+          spaceBetween: 30,
+        },
+      },
+    });
+  });
+</script>
 
 {% schema %}
 {
-  "name": "Flip Card Section",
-  "max_blocks": 5,
+  "name": "Flip Cards",
+  "tag": "section",
+  "class": "flip-cards-section",
+  "settings": [],
   "blocks": [
     {
-      "name": "Add Card",
       "type": "flip_card",
+      "name": "Card",
+      "limit": 10,
       "settings": [
-        {
-          "type": "header",
-          "content": "Front Card Settings"
-        },
         {
           "type": "image_picker",
           "id": "front_image",
@@ -162,13 +142,9 @@
         },
         {
           "type": "text",
-          "id": "front_text",
-          "label": "Front Text",
-          "default": "Hover to flip"
-        },
-        {
-          "type": "header",
-          "content": "Back Card Settings"
+          "id": "front_title",
+          "label": "Front Title",
+          "default": "FRONT"
         },
         {
           "type": "product",
@@ -186,17 +162,17 @@
           "label": "Product 3"
         },
         {
-          "type": "text",
-          "id": "back_text",
-          "label": "Bottom Text",
-          "default": "Click to explore"
+          "type": "textarea",
+          "id": "back_description",
+          "label": "Back Description",
+          "default": "Lorem ipsum, dolor sit amet consectetur adipisicing elit."
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Flip Card Section",
+      "name": "Flip Cards",
       "blocks": [
         {
           "type": "flip_card"
