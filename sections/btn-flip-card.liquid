@@ -1,0 +1,67 @@
+{{ 'btn-flip-card.css' | asset_url | stylesheet_tag }}
+
+<div class="card__container">
+  <div class="card">
+    <div class="card__front">
+      <img src="" height="40px" width="40px" alt="Flip Card Image">
+      <div class="overlay__card"></div>
+      <h3 class="centered__card">FRONT</h3>
+    </div>
+    <div class="card__back">
+      <div class="content__box">
+        <div class="toolbox__section">
+          <h3>TOOLBOX</h3>
+        </div>
+        <div class="product__container">
+          <div class="product__item">
+            <a href="#">
+              <img src="" height="40px" width="40px" alt="Toolbox Product">
+            </a>
+          </div>
+          <div class="product__item">
+            <a href="#">
+              <img src="" height="40px" width="40px" alt="Toolbox Product">
+            </a>
+          </div>
+          <div class="product__item">
+            <a href="#">
+              <img src="" height="40px" width="40px" alt="Toolbox Product">
+            </a>
+          </div>
+        </div>
+      </div>
+      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Btn Flip Card",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Front Card Title"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Flip Card",
+      "type": "add_card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Front Card Title"
+        },
+        {
+          "type": "image_picker",
+          "id": "btn_front_card_image",
+          "label": "Front Card Image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
